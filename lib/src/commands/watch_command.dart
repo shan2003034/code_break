@@ -13,7 +13,7 @@ import '../services/watcher_service.dart';
 import '../utils/console_input.dart';
 import '../utils/logger.dart';
 
-/// `code_break watch` - the main loop.
+
 class WatchCommand extends Command<int> {
   WatchCommand() {
     argParser

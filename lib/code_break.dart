@@ -1,4 +1,4 @@
-/// Code-Break: public API surface of the package.
+
 library;
 
 export 'src/commands/break_now_command.dart';
@@ -11,7 +11,7 @@ export 'src/services/audio_service.dart';
 export 'src/services/break_flow.dart';
 export 'src/services/elevenlabs_service.dart';
 export 'src/services/github_service.dart';
-export 'src/services/groq_service.dart'; // ollama_service.dart වෙනුවට
+export 'src/services/groq_service.dart'; 
 export 'src/services/watcher_service.dart';
 export 'src/utils/console_input.dart';
 export 'src/utils/logger.dart';

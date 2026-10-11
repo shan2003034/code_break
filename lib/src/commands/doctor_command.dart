@@ -3,11 +3,11 @@ import 'package:args/command_runner.dart';
 import '../config.dart';
 import '../errors.dart';
 import '../services/github_service.dart';
-import '../services/groq_service.dart'; // Ollama වෙනුවට Groq යොදා ඇත
+import '../services/groq_service.dart'; 
 import '../utils/logger.dart';
 import '../utils/readme_streak.dart';
 
-/// `code_break doctor` - checks every integration and says how to fix it.
+
 class DoctorCommand extends Command<int> {
   @override
   final String name = 'doctor';
@@ -31,7 +31,7 @@ class DoctorCommand extends Command<int> {
         : Log.dim('config: $env'));
     Log.line();
 
-    // -- Groq (Replace Ollama section) ----------------------------------------
+    //  Groq 
     if (config.groqApiKey.isEmpty) {
       Log.warn('GROQ_API_KEY not set - breaks will use built-in messages.');
       problems++;
@@ -39,7 +39,7 @@ class DoctorCommand extends Command<int> {
       Log.success('Groq API Key found (model: gemma2-9b-it).');
     }
 
-    // -- ElevenLabs -----------------------------------------------------------
+    //  ElevenLabs 
     if (config.hasElevenLabs) {
       Log.success('ElevenLabs key found (voice ${config.elevenLabsVoiceId}, '
           'model ${config.elevenLabsModelId}). It is verified on first use.');
@@ -47,7 +47,7 @@ class DoctorCommand extends Command<int> {
       Log.warn('ELEVENLABS_API_KEY not set - breaks will be silent.');
     }
 
-    // -- GitHub ---------------------------------------------------------------
+    //  GitHub 
     final token = config.githubToken;
     if (token == null) {
       Log.warn('GITHUB_TOKEN not set - the profile streak is disabled.');

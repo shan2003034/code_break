@@ -7,7 +7,7 @@ enum BreakReason {
   frantic,
 }
 
-/// A fired trigger: the [reason] plus a human readable [detail] that is shown
+/// A fired trigger: the  plus a human readable  that is shown
 /// in the terminal and given to Gemma as context.
 class BreakTrigger {
   const BreakTrigger(this.reason, this.detail);
@@ -27,7 +27,7 @@ class WatchSettings {
     this.snooze = const Duration(minutes: 10),
   });
 
-  /// Short thresholds so a demo (or video) does not take an hour.
+  /// Short thresholds so a demo  does not take an hour.
   static const WatchSettings demo = WatchSettings(
     marathon: Duration(minutes: 1),
     idleReset: Duration(seconds: 30),
@@ -44,7 +44,7 @@ class WatchSettings {
   /// so the current session is forgotten.
   final Duration idleReset;
 
-  /// This many saves inside [burstWindow] counts as "stuck on a bug".
+  /// This many saves inside counts as "stuck on a bug".
   final int burstSaves;
   final Duration burstWindow;
 
@@ -55,10 +55,7 @@ class WatchSettings {
   final Duration snooze;
 }
 
-/// Pure decision logic: feed it save events, ask it whether a break is due.
-///
-/// It has no timers or I/O of its own, and the clock is injectable, which
-/// keeps it trivial to unit-test.
+
 class ActivityMonitor {
   ActivityMonitor(this.settings, {DateTime Function()? clock})
       : _clock = clock ?? DateTime.now;
@@ -75,13 +72,13 @@ class ActivityMonitor {
   /// Number of saves in the current session.
   int get sessionSaves => _sessionSaves;
 
-  /// Length of the current coding session (zero when idle).
+  /// Length of the current coding session 
   Duration get sessionLength {
     final start = _sessionStart;
     return start == null ? Duration.zero : _clock().difference(start);
   }
 
-  /// Registers one file save.
+ 
   void recordSave() {
     final now = _clock();
     _expireIdleSession(now);
@@ -92,7 +89,7 @@ class ActivityMonitor {
     _trimBurstWindow(now);
   }
 
-  /// Returns a [BreakTrigger] when a break is due, otherwise `null`.
+ 
   BreakTrigger? evaluate() {
     final now = _clock();
     _expireIdleSession(now);
@@ -125,8 +122,7 @@ class ActivityMonitor {
     return null;
   }
 
-  /// Forgets the current session and stays quiet for [quiet]
-  /// (defaults to [WatchSettings.cooldown]).
+ 
   void startCooldown({Duration? quiet}) {
     _resetSession();
     _quietUntil = _clock().add(quiet ?? settings.cooldown);

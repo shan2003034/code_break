@@ -22,7 +22,7 @@ class ElevenLabsService {
   final String modelId;
   final http.Client _client;
 
-  /// Returns the spoken [text] as MP3 bytes.
+  /// Returns the spoken  as MP3 bytes.
   Future<Uint8List> synthesize(String text) async {
     final uri = Uri.parse('$_baseUrl/text-to-speech/$voiceId')
         .replace(queryParameters: {'output_format': 'mp3_44100_128'});
