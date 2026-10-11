@@ -4,15 +4,15 @@ A CLI agent for the Hacktoberfest 2026 **Touch Grass** challenge. It watches the
 files you save, notices when you have been coding too long (or are furiously
 saving while stuck on a bug), and interrupts you:
 
-1. **Gemma** (running locally through **Ollama**) writes a short, witty "go
+1. **Groq** (using the blazing-fast **Mixtral** model) writes a short, witty "go
    outside" command.
 2. **ElevenLabs** says it out loud.
 3. The CLI pauses and asks **"What unique thing did you see outside?"**
-4. Gemma checks that your answer sounds like a real outdoor observation.
+4. Groq checks that your answer sounds like a real outdoor observation.
 5. If it does, your **GitHub profile README** streak is bumped:
    `Touch Grass 🌱 Streak: X Days`.
 
-```
+```text
 code_break/
 ├── bin/code_break.dart              # entry point (command runner)
 ├── lib/
@@ -27,7 +27,7 @@ code_break/
 │       ├── services/
 │       │   ├── activity_monitor.dart  # pure "is a break due?" logic
 │       │   ├── watcher_service.dart   # `watcher` package wrapper
-│       │   ├── ollama_service.dart    # Gemma: message + validation
+│       │   ├── groq_service.dart      # Groq: message + validation (Mixtral)
 │       │   ├── elevenlabs_service.dart# text-to-speech
 │       │   ├── audio_service.dart     # plays the mp3 (macOS/Windows/Linux)
 │       │   ├── github_service.dart    # profile README read + commit
@@ -49,29 +49,19 @@ code_break/
 | --- | --- | --- |
 | Dart SDK 3.5+ | build and run | <https://dart.dev/get-dart> |
 | VS Code + **Dart** extension | editing, running, compiling | Extensions panel → "Dart" |
-| Ollama | runs Gemma locally | <https://ollama.com/download> |
+| Groq account | blazing fast AI generation | <https://console.groq.com> |
 | ElevenLabs account | voice (optional) | <https://elevenlabs.io> |
 | GitHub account + profile README repo | streak (optional) | repo named exactly like your username |
 
 Voice and streak are optional: without a key/token Code-Break still interrupts
 you, it just stays silent / skips the GitHub update.
 
-## 2. Ollama + Gemma
+## 2. API keys
 
-```bash
-ollama pull gemma        # downloads the model once
-ollama serve             # only if the Ollama app is not already running
-curl http://localhost:11434/api/tags   # should list "gemma"
-```
+**Groq** - Go to [console.groq.com](https://console.groq.com) → *API Keys* → Create a new API key. We use the `mixtral-8x7b-320k` model which is free and natively supports JSON outputs.
 
-Newer Gemma generations work too: `ollama pull gemma3` and set
-`OLLAMA_MODEL=gemma3` in `.env`.
-
-## 3. API keys
-
-**ElevenLabs** - elevenlabs.io → *Developers / API Keys* → create a key. If you
-restrict the key, give it the **Text to Speech** permission. Optionally copy a
-voice ID from the *Voices* page.
+**ElevenLabs** - elevenlabs.io → *Developers / API Keys* → create a key. 
+*Note for Free Tier Users:* You **cannot** use custom community voices (Voice Library). Go to the *Voices* page, select a **Default / Premade** voice (like Alice), and copy its Voice ID.
 
 **GitHub** - you need a repo named exactly like your username (e.g.
 `octocat/octocat`) with a `README.md`. Then create a token:
@@ -81,30 +71,35 @@ voice ID from the *Voices* page.
   profile repo → Repository permissions → **Contents: Read and write**.
 * *Classic token*: scope `public_repo` (the profile repo is public).
 
-## 4. Configure `.env`
+## 3. Configure `.env`
 
 ```bash
 cp .env.example .env      # Windows: copy .env.example .env
 ```
 
 ```ini
-OLLAMA_HOST=http://localhost:11434
-OLLAMA_MODEL=gemma
-ELEVENLABS_API_KEY=xi-...
-ELEVENLABS_VOICE_ID=21m00Tcm4TlvDq8ikWAM
+# Groq API Key (Replaces Ollama)
+GROQ_API_KEY=gsk_...
+
+# ElevenLabs (Voice)
+ELEVENLABS_API_KEY=sk_...
+ELEVENLABS_VOICE_ID=Xb7hH8MSALEjdMEXNKf2
+ELEVENLABS_MODEL_ID=eleven_multilingual_v2
+
+# GitHub (Streak)
 GITHUB_TOKEN=github_pat_...
-GITHUB_USERNAME=            # optional, looked up from the token
+GITHUB_USERNAME=shan2003034
 ```
 
 Lookup order: real environment variables → `--env-file <path>` → `./.env` →
 `.env` next to the compiled binary → `~/.code_break.env`. `.env` is git-ignored;
 never commit it.
 
-## 5. Run it from VS Code
+## 4. Run it from VS Code
 
 1. Open the `code_break` folder, then **Terminal → New Terminal**.
 2. `dart pub get`
-3. `dart run bin/code_break.dart doctor` - checks Ollama, ElevenLabs, GitHub.
+3. `dart run bin/code_break.dart doctor` - checks Groq, ElevenLabs, GitHub.
 4. `dart run bin/code_break.dart break-now` - plays one full break right away.
 5. `dart run bin/code_break.dart watch --demo` - tiny thresholds (1 minute, or 5
    saves in 30 s). Save a few files in the folder and watch it trigger.
@@ -115,7 +110,7 @@ see?" prompt needs real keyboard input, which the Debug Console cannot give.
 
 Run the tests with `dart test`.
 
-## 6. Compile a standalone executable
+## 5. Compile a standalone executable
 
 In VS Code: **Terminal → Run Build Task…** (`Ctrl/Cmd+Shift+B`) →
 *Code-Break: compile executable*. Or by hand:
@@ -138,14 +133,14 @@ code_break                 # same as: code_break watch
 Code's integrated terminal works well). It has to stay attached to a terminal
 because the break is interactive.
 
-## 7. Commands and options
+## 6. Commands and options
 
 ```
 code_break [--env-file <path>] [--verbose] <command>
 
 watch       Watch a directory and interrupt you when you code for too long
 break-now   Trigger a Touch Grass break right now (demo / setup test)
-doctor      Check Ollama, ElevenLabs and GitHub configuration
+doctor      Check Groq, ElevenLabs and GitHub configuration
 ```
 
 `watch` options (defaults in brackets):
@@ -162,16 +157,14 @@ doctor      Check Ollama, ElevenLabs and GitHub configuration
 
 Global options go **before** the command: `code_break --verbose watch --demo`.
 
-## 8. How the pieces work
+## 7. How the pieces work
 
 * **Trigger** - every save (add/modify, deduplicated, with `.git`, `build`,
   `node_modules`, temp files... ignored) goes to `ActivityMonitor`. A *marathon*
   fires when a session (gaps shorter than `--idle-reset`) reaches `--marathon`
   minutes; *frantic* fires on `--burst-saves` saves within `--burst-window`.
-* **Gemma** - `POST /api/generate` with `stream: false`. The verdict request uses
-  `format: "json"`, treats your answer strictly as data (angle brackets
-  stripped, instructions ignored) and expects `{"valid": true, "reason": "..."}`.
-  If Ollama is down, the break still happens with a built-in message.
+* **Groq AI** - `POST /openai/v1/chat/completions` using `mixtral-8x7b-320k`. The verdict request uses
+  `response_format: { "type": "json_object" }` to guarantee a strictly formatted `{"valid": true, "reason": "..."}` response. If the API fails, the break still happens with a built-in message.
 * **Voice** - `POST /v1/text-to-speech/{voice_id}` returns MP3 bytes, written to
   a temp file and played with `afplay` (macOS), PowerShell's MediaPlayer
   (Windows) or `mpv`/`ffplay`/`mpg123`/`cvlc`/`play` (Linux). The temp file is
@@ -185,15 +178,12 @@ Global options go **before** the command: `code_break --verbose watch --demo`.
   section is appended. If it already has a plain `Touch Grass 🌱 Streak: N Days`
   line, that line is upgraded in place.
 
-## 9. Troubleshooting
+## 8. Troubleshooting
 
-* **"Could not reach Ollama"** - start it (`ollama serve` or open the app).
-* **"Model gemma is not installed"** - `ollama pull gemma` (or fix `OLLAMA_MODEL`).
+* **Groq HTTP 400/404 (Model not found/JSON format error)** - Some models do not support JSON outputs or are decommissioned. Ensure `GROQ_API_KEY` is valid and the model is set to `mixtral-8x7b-320k` in `groq_service.dart`.
+* **ElevenLabs HTTP 402 (Free users cannot use library voices)** - Your free account cannot access Community Library voices. Go to ElevenLabs, choose a "Default" voice (e.g., Alice), and update `ELEVENLABS_VOICE_ID` in `.env`.
+* **GitHub HTTP 403 (Resource not accessible / Read-only)** - Your Token lacks write permissions, or your profile repository is archived. Ensure the token has **Contents: Read and write** enabled, and unarchive the repository from GitHub Settings.
 * **No sound on Linux** - install `mpv` (`sudo apt install mpv`). On WSL there is
   usually no audio device.
-* **GitHub 404** - the repo `<username>/<username>` must exist and the token must
-  include it with *Contents: Read and write*.
 * **Nothing triggers** - run with `--verbose` to see every counted save, or use
   `--demo`.
-* **Many files on Linux** - if the watcher fails with an inotify error, raise
-  `fs.inotify.max_user_watches`, or point `--dir` at a smaller folder.
