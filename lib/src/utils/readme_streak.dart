@@ -31,17 +31,7 @@ class StreakUpdate {
   final StreakOutcome outcome;
 }
 
-/// Pure (I/O-free, easily testable) logic that finds and bumps the
-/// `Touch Grass 🌱 Streak: X Days` string in a README.
-///
-/// The counter line carries an invisible HTML comment with the last day that
-/// was counted:
-///
-///     Touch Grass 🌱 Streak: 5 Days <!-- touch-grass:last=2026-10-11 -->
-///
-/// That marker lets us avoid double-counting a day and reset the streak when a
-/// day was skipped. READMEs that only contain the plain text (no marker) are
-/// simply incremented.
+
 class ReadmeStreak {
   ReadmeStreak._();
 

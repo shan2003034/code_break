@@ -34,11 +34,7 @@ class StreakCommit {
   String get profileUrl => 'https://github.com/$owner/$owner';
 }
 
-/// Minimal GitHub REST client for the "profile README streak" feature.
-///
-/// Authenticates with a Personal Access Token, reads `<user>/<user>/README`,
-/// bumps the streak counter and commits the new file through the Contents API
-/// (a normal commit on the default branch, no local git needed).
+
 class GitHubService {
   GitHubService({
     required this.token,
@@ -62,7 +58,7 @@ class GitHubService {
         'User-Agent': 'code-break-cli',
       };
 
-  /// The GitHub login to use: [username] if set, otherwise `GET /user`.
+  
   Future<String> resolveLogin() async {
     final configured = username;
     if (configured != null && configured.isNotEmpty) {
@@ -78,7 +74,7 @@ class GitHubService {
     return login;
   }
 
-  /// Fetches and decodes `<owner>/<owner>`'s README.
+  
   Future<ProfileReadme> fetchProfileReadme(String owner) async {
     final res = await _send(
       () => _client.get(
@@ -103,16 +99,13 @@ class GitHubService {
           'Unsupported README encoding: ${json['encoding']}.');
     }
 
-    // GitHub wraps the base64 text at 60 columns, so strip whitespace first.
+  
     final bytes =
         base64.decode(base64.normalize(content.replaceAll(RegExp(r'\s'), '')));
     return ProfileReadme(path: path, sha: sha, content: utf8.decode(bytes));
   }
 
-  /// Counts one Touch Grass break: fetch README -> bump streak -> commit.
-  ///
-  /// Retries once if somebody pushed to the README in the meantime. When today
-  /// was already counted nothing is committed.
+  
   Future<StreakCommit> recordTouchGrass({DateTime? now}) async {
     final owner = await resolveLogin();
     final stamp = now ?? DateTime.now();
@@ -144,7 +137,7 @@ class GitHubService {
 
   void dispose() => _client.close();
 
-  // ---------------------------------------------------------------------------
+  
 
   Future<void> _commit(
     String owner,

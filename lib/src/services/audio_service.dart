@@ -14,15 +14,9 @@ class _PlayerCommand {
   final List<String> arguments;
 }
 
-/// Plays MP3 audio through whatever player the operating system offers.
-///
-/// The audio is written to a temporary `.mp3` that is deleted afterwards.
-///
-///  * macOS:   `afplay` (built in)
-///  * Windows: PowerShell + `System.Windows.Media.MediaPlayer` (built in)
-///  * Linux:   the first installed of `mpv`, `ffplay`, `mpg123`, `cvlc`, `play`
+
 class AudioService {
-  /// Plays [mp3Bytes] and completes when playback has finished.
+  /// Plays and completes when playback has finished.
   Future<void> play(Uint8List mp3Bytes) async {
     final dir = await Directory.systemTemp.createTemp('code_break_');
     final file = File(p.join(dir.path, 'touch_grass.mp3'));

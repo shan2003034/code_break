@@ -6,10 +6,7 @@ import '../services/break_flow.dart';
 import '../utils/console_input.dart';
 import '../utils/logger.dart';
 
-/// `code_break break-now` - runs the Touch Grass flow immediately.
-///
-/// Perfect for demos and for testing your Ollama / ElevenLabs / GitHub setup
-/// without waiting for a real marathon.
+
 class BreakNowCommand extends Command<int> {
   BreakNowCommand() {
     argParser

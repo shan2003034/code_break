@@ -5,10 +5,7 @@ import 'package:watcher/watcher.dart';
 
 import '../utils/logger.dart';
 
-/// Watches a directory tree and reports "the developer saved a file" events.
-///
-/// It filters out noise (build output, VCS metadata, editor temp files) and
-/// de-duplicates the burst of events that most editors emit for one save.
+
 class DirectoryActivityWatcher {
   DirectoryActivityWatcher({
     required this.directory,

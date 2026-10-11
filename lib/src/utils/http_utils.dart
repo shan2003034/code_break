@@ -5,11 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../errors.dart';
 
-/// Runs [send] and converts every low-level network failure (timeout, DNS,
-/// refused connection, ...) into a friendly [ServiceException].
-///
-/// [service] is the human name used in messages, [hint] is appended to help the
-/// user fix the problem (e.g. "Is Ollama running?").
+
 Future<http.Response> guardedRequest(
   Future<http.Response> Function() send, {
   required String service,

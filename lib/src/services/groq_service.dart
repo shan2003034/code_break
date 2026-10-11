@@ -26,7 +26,7 @@ class GroqService {
   ];
 
   final String apiKey;
-  final String model = 'llama-3.1-8b-instant';
+  final String model = 'qwen/qwen3.8-27b';
   final http.Client _client;
   final Random _random = Random();
 
