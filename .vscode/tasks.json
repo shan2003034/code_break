@@ -1,0 +1,22 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Code-Break: get packages",
+      "type": "shell",
+      "command": "dart pub get",
+      "problemMatcher": []
+    },
+    {
+      "label": "Code-Break: compile executable",
+      "type": "shell",
+      "command": "dart compile exe bin/code_break.dart -o build/code_break",
+      "windows": {
+        "command": "dart compile exe bin/code_break.dart -o build\\code_break.exe"
+      },
+      "dependsOn": ["Code-Break: get packages"],
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    }
+  ]
+}

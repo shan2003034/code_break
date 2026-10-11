@@ -1,0 +1,24 @@
+name: code_break
+description: >-
+  Code-Break: a CLI agent that watches your coding activity, interrupts marathon
+  sessions with a witty local-AI nudge (Ollama + Gemma), says it out loud
+  (ElevenLabs) and rewards you with a GitHub profile streak.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ^3.5.0
+
+# Lets you run `dart pub global activate --source path .` and then just `code_break`.
+executables:
+  code_break:
+
+dependencies:
+  args: ^2.5.0
+  http: ^1.2.2
+  path: ^1.9.0
+  watcher: ^1.1.0
+
+dev_dependencies:
+  lints: ^5.0.0
+  test: ^1.25.0

@@ -1,0 +1,12 @@
+# Dart / pub
+.dart_tool/
+build/
+*.exe
+
+# Secrets - NEVER commit these
+.env
+*.env
+!.env.example
+
+# Temp audio
+*.mp3

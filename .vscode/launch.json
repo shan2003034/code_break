@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Code-Break: watch --demo",
+      "type": "dart",
+      "request": "launch",
+      "program": "bin/code_break.dart",
+      "args": ["watch", "--demo", "--verbose"],
+      "console": "terminal"
+    },
+    {
+      "name": "Code-Break: break-now",
+      "type": "dart",
+      "request": "launch",
+      "program": "bin/code_break.dart",
+      "args": ["break-now"],
+      "console": "terminal"
+    },
+    {
+      "name": "Code-Break: doctor",
+      "type": "dart",
+      "request": "launch",
+      "program": "bin/code_break.dart",
+      "args": ["doctor"],
+      "console": "terminal"
+    }
+  ]
+}
